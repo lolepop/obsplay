@@ -15,9 +15,9 @@ std::unordered_set<std::string> Native::getAllWindows()
     if (XQueryTree(display, DefaultRootWindow(display), &root, &parent, &children, &nChildren))
     {
         // XWindowAttributes windowAttributes;
-        char* name;
         for (unsigned int i = 0; i < nChildren; i++)
         {
+            char* name;
             auto child = children[i];
             // wtf window is in the foreground and it somehow isnt viewable
             // if (XGetWindowAttributes(display, child, &windowAttributes) && windowAttributes.map_state == IsViewable)
@@ -27,13 +27,13 @@ std::unordered_set<std::string> Native::getAllWindows()
                     windows.insert(name);
                 }
             // }
+            free(name);
         }
         
-        XFree(name);
     }
 
     XFree(children);
-    XFree(display);
+    XCloseDisplay(display);
 
     return windows;
 }

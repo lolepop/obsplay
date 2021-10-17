@@ -62,6 +62,7 @@ void ObsPlayUI::saveSettings()
 
     obs_data_set_bool(s, "enabled", ui->enableCheckBox->isChecked());
     obs_data_set_int(s, "timeout", ui->timeoutBox->value());
+    obs_data_set_int(s, "interval", ui->intervalBox->value());
 
     auto whitelist = obs_data_array_create();
     auto entries = whitelistModel->stringList();
@@ -87,6 +88,7 @@ void ObsPlayUI::loadSettings()
     
     ui->enableCheckBox->setChecked(obs_data_get_bool(s, "enabled"));
     ui->timeoutBox->setValue(obs_data_get_int(s, "timeout"));
+    ui->intervalBox->setValue(obs_data_get_int(s, "interval"));
     
     auto whitelist = Settings::getArray(s, "whitelist");
     for (size_t i = 0; i < obs_data_array_count(whitelist); i++)

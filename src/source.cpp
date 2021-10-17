@@ -27,6 +27,7 @@ void eventLoop(const std::shared_ptr<Settings>& settings)
     {
         auto s = settings->getSettings();
         auto isEnabled = obs_data_get_bool(s, "enabled");
+        auto interval = obs_data_get_int(s, "interval");
 
         if (isEnabled)
         {
@@ -56,7 +57,7 @@ void eventLoop(const std::shared_ptr<Settings>& settings)
         }
 
         lastScan = std::chrono::high_resolution_clock::now();
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::seconds(interval));
     }
 }
 
