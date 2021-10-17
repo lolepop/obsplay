@@ -66,7 +66,7 @@ void initUI(const std::shared_ptr<Settings>& settings)
 
 	action->connect(action, &QAction::triggered, [=]() {
         auto window = reinterpret_cast<QMainWindow*>(obs_frontend_get_main_window());
-	    ObsPlayUI cfgUI(settings, window);
+        ObsPlayUI cfgUI(settings, window);
         cfgUI.exec();
     });
 }
