@@ -20,6 +20,7 @@ public:
     static void setDefaultSettings(obs_data_t* settings);
     static OBSDataArray getArray(obs_data_t* settings, const char* key);
 
+    Settings();
     OBSData getSettings();
     void saveSettings();
 };

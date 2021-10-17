@@ -9,6 +9,11 @@ void Settings::setDefaultSettings(obs_data_t* settings)
     obs_data_set_default_int(settings, "timeout", 60);
 }
 
+Settings::Settings()
+{
+    os_mkdirs(obs_current_module());
+}
+
 OBSData Settings::getSettings()
 {
     std::scoped_lock lock(mtx);
