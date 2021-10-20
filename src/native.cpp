@@ -59,7 +59,90 @@ bool Native::isWindowOpen(std::vector<std::string> filter)
 #include <vector>
 #include <tuple>
 #include <Psapi.h>
+#include <tlhelp32.h>
 
+#ifdef WINDOWS_AC_COMPAT
+// list all processes instead of processes of windows
+// cannot obtain handles of some windows due to mnay anticheats stripping openprocess handles without kernel access or weird usermode hooks
+
+class ProcessList
+{
+    HANDLE handle;
+
+public:
+    class Iterator
+    {
+        int pos = 0;
+        HANDLE* hProcessSnap;
+        PROCESSENTRY32W pe32;
+
+    public:
+        using iterator_category = std::input_iterator_tag;
+
+        Iterator(HANDLE* parent) : hProcessSnap(parent), pe32(PROCESSENTRY32W())
+        {
+            pe32.dwSize = sizeof(PROCESSENTRY32W);
+            next(true);
+        }
+
+        Iterator() : pos(-1) { }
+
+        void next(bool first = false)
+        {
+            pos = Process32NextW(*hProcessSnap, &pe32) || first ? pos + 1 : -1;
+        }
+
+        PROCESSENTRY32W* operator*() { return &pe32; }
+        PROCESSENTRY32W operator->() { return ***this; }
+        Iterator& operator++() { next(); return *this; }
+        Iterator& operator++(int) { auto tmp = *this; ++(*this); return tmp; }
+
+        friend bool operator== (const Iterator& a, const Iterator& b) { return a.pos == b.pos; }
+        friend bool operator!= (const Iterator& a, const Iterator& b) { return a.pos != b.pos; }
+
+    };
+
+    Iterator begin() { return Iterator(&handle); }
+    Iterator end() { return Iterator(); }
+
+    ProcessList()
+    {
+        handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        if (handle == INVALID_HANDLE_VALUE)
+            throw 0;
+    }
+
+    ~ProcessList()
+    {
+        CloseHandle(handle);
+    }
+
+};
+
+std::unordered_set<std::string> Native::getAllWindows()
+{
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+    std::unordered_set<std::string> o;
+    ProcessList p;
+    for (auto i : p)
+        o.insert(converter.to_bytes(i->szExeFile));
+    return o;
+}
+
+bool Native::isWindowOpen(std::vector<std::string> filter)
+{
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+    std::unordered_set<std::wstring> f;
+    for (auto i : filter)
+        f.insert(converter.from_bytes(i));
+
+    ProcessList p;
+    for (auto i : p)
+        if (f.find(i->szExeFile) != f.end())
+            return true;
+    return false;
+}
+#else
 std::unordered_set<DWORD> getPidList()
 {
     std::unordered_set<DWORD> pids;
@@ -155,4 +238,6 @@ bool Native::isWindowOpen(std::vector<std::string> filter)
 
     return found;
 }
+#endif
+
 #endif

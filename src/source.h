@@ -20,5 +20,6 @@
 #endif
 
 #define SETTINGS_PATH() obs_module_get_config_path(obs_current_module(), "settings.json")
+#define WINDOWS_AC_COMPAT true
 
 #define log(s) blog(LOG_INFO, "obsplay: %s", s);
