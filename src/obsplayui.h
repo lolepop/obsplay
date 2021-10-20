@@ -6,6 +6,7 @@
 #include <QListView>
 #include <QStringListModel>
 #include <QMessageBox>
+#include <memory>
 #include "settings.h"
 
 QT_BEGIN_NAMESPACE
