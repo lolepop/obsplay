@@ -9,5 +9,5 @@
 namespace Native
 {
     std::unordered_set<std::string> getAllWindows();
-    bool isWindowOpen(std::vector<std::string> filter);
+    bool isWindowOpen(const std::vector<std::string>& filter);
 }

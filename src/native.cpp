@@ -38,7 +38,7 @@ std::unordered_set<std::string> Native::getAllWindows()
     return windows;
 }
 
-bool Native::isWindowOpen(std::vector<std::string> filter)
+bool Native::isWindowOpen(const std::vector<std::string>& filter)
 {
     auto windows = getAllWindows();
     for (auto i = filter.begin(); i != filter.end(); i++)
@@ -129,7 +129,7 @@ std::unordered_set<std::string> Native::getAllWindows()
     return o;
 }
 
-bool Native::isWindowOpen(std::vector<std::string> filter)
+bool Native::isWindowOpen(const std::vector<std::string>& filter)
 {
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
     std::unordered_set<std::wstring> f;
@@ -208,7 +208,7 @@ std::unordered_set<std::string> Native::getAllWindows()
     return windows;
 }
 
-bool Native::isWindowOpen(std::vector<std::string> filter)
+bool Native::isWindowOpen(const std::vector<std::string>& filter)
 {
     std::unordered_set<std::wstring> f;
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
