@@ -1,3 +1,5 @@
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
 #include "native.h"
 
 #ifdef LINUX
@@ -50,8 +52,6 @@ bool Native::isWindowOpen(const std::vector<std::string>& filter)
 }
 #else
 // windows implementation
-
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 
 #include <locale>
 #include <codecvt>

@@ -7,10 +7,15 @@ set(CMAKE_CXX_STANDARD 17)
 file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*)
 file(GLOB obsplay_UI_FILES ${PROJECT_SOURCE_DIR}/ui/*.ui)
 
+set(CMAKE_AUTOMOC ON)
 find_qt(COMPONENTS Widgets Core)
-qt5_wrap_ui(obsplay_UI ${obsplay_UI_FILES})
 
-message(CMAKE_CURRENT_BINARY_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+qt6_wrap_ui(obsplay_UI ${obsplay_UI_FILES})
+# find_package(Qt6)
+# if (NOT Qt6_FOUND)
+#     qt5_wrap_ui(obsplay_UI ${obsplay_UI_FILES})
+#     else()
+# endif()
 
 add_library(obsplay MODULE ${SRC_FILES} ${obsplay_UI})
 
